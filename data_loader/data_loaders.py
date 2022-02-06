@@ -1,6 +1,8 @@
 from torchvision import datasets, transforms
 from base import BaseDataLoader
 
+# DataLoader 클래스들 쌓아두는 곳.
+
 
 class MnistDataLoader(BaseDataLoader):
     """

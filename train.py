@@ -19,6 +19,7 @@ torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
 
 def main(config):
+    # logger 객체 생성
     logger = config.get_logger('train')
 
     # setup data_loader instances
@@ -55,7 +56,15 @@ def main(config):
 
 
 if __name__ == '__main__':
+    # ex. train.py 
+    # --config C:\Users\wjdgn\pytorch_template\config.json
+    # --device GPU:1
+    # --lr 1e-7
+    # --bs 50
+    
+    
     args = argparse.ArgumentParser(description='PyTorch Template')
+    # 다음은 고정적인 arg이다. 여기선 config.json 파일 지정과 사용할 GPU를 지정한다.
     args.add_argument('-c', '--config', default=None, type=str,
                       help='config file path (default: None)')
     args.add_argument('-r', '--resume', default=None, type=str,
@@ -65,9 +74,19 @@ if __name__ == '__main__':
 
     # custom cli options to modify configuration from default values given in json file.
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
+    # 다음은 사용자 지정 arg이다.
+    # 코드 상 flag는 무조건 --를 붙혀야 한다. -는 허용하지 않는 구조.
+    # 코드 상 target은 무조건 ;로 구분해야 함.
     options = [
         CustomArgs(['--lr', '--learning_rate'], type=float, target='optimizer;args;lr'),
         CustomArgs(['--bs', '--batch_size'], type=int, target='data_loader;args;batch_size')
     ]
+    # 다음 과정을 통해 config 객체에 모든 config 값을 담고 실행시킨다.
+    # 다음 매개변수는 
+    # args : argparse.ArgumentParser
+    # options : List(Nametuple)
     config = ConfigParser.from_args(args, options)
+    ###########################################################################################
+    # 위의 과정은 config를 사용하기 쉬운 형태로 즉, 객체 형태로 담아두기 위한 과정이다.
+    # config : ConfigParser
     main(config)
