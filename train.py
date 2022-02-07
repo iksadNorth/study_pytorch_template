@@ -64,6 +64,18 @@ def main(config):
     # https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html#torch.optim.lr_scheduler.StepLR
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
 
+    # name은 저장 파일 이름에 쓰일 예정임.
+    # n_gpu는 말그대로 GPU 쪽에서 사용될 것임.
+    # 각 환경변수의 type은 각자 알맞는 모듈 중 선택하고 싶은 class를 일컫는다.
+    # save_dir는 모델, 로그, config.json 등등을 저장하는 경로의 root경로이다.
+    # verbosity는 로그 레벨을 지정하는 것으로 각 숫자는 다음을 의미한다.
+    #       0: logging.WARNING,
+    #       1: logging.INFO,
+    #       2: logging.DEBUG
+    # 
+    # 각 환경변수의 args는 해당 환경 변수의 매개변수로 들어가게 될 인자들을 일컫는다.
+    # arch, data_loader, loss, metrics, trainer는 사용자가 만든 것 기반.
+    # optimizer, lr_scheduler는 기존의 torch 라이브러리에 있는 것 기반.
     trainer = Trainer(model, criterion, metrics, optimizer,
                       config=config,
                       device=device,
