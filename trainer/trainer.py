@@ -17,16 +17,22 @@ class Trainer(BaseTrainer):
         self.data_loader = data_loader
         if len_epoch is None:
             # epoch-based training
+            # 딱 data_loader에서 보유한 요소 만큼만 반복함.
             self.len_epoch = len(self.data_loader)
         else:
             # iteration-based training
+            # 무한 루프를 부여함. 말그대로 무한으로 계속 yield함.
             self.data_loader = inf_loop(data_loader)
             self.len_epoch = len_epoch
         self.valid_data_loader = valid_data_loader
         self.do_validation = self.valid_data_loader is not None
         self.lr_scheduler = lr_scheduler
+        # 왜 있는지 모르겠음.
         self.log_step = int(np.sqrt(data_loader.batch_size))
 
+        # 해당 self.metric_ftns들을 행으로 두고 
+        # 열로 ['total', 'counts', 'average']을 두는 
+        # pd.DataFrame을 내장하고 있음
         self.train_metrics = MetricTracker('loss', *[m.__name__ for m in self.metric_ftns], writer=self.writer)
         self.valid_metrics = MetricTracker('loss', *[m.__name__ for m in self.metric_ftns], writer=self.writer)
 
